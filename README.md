@@ -7,7 +7,7 @@
 このサンプルプログラムではバッチサイズは固定長のみ対応しています。
 
 PyTorchのMNISTの訓練は、PyTorch公式の[Basic MNIST Example](https://github.com/pytorch/examples/tree/master/mnist)を元にしています。
-ONNXへの出力は、公式のチュートリアル[(optional) Exporting a Model from PyTorch to ONNX and Running it using ONNX](https://github.com/onnx/tutorials/blob/master/tutorials/PytorchOnnxExport.ipynb)を参考にしています。
+ONNXへの出力は、公式のチュートリアル[(optional) Exporting a Model from PyTorch to ONNX and Running it using ONNX](https://pytorch.org/tutorials/advanced/super_resolution_with_onnxruntime.html)を参考にしています。
 
 ## 環境
 TensorRT 7.0.0と[互換性のあるバージョン](https://docs.nvidia.com/deeplearning/sdk/tensorrt-archived/tensorrt-700/tensorrt-release-notes/tensorrt-7.html#rel_7-0-0)を使用する。
