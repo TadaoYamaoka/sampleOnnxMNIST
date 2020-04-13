@@ -132,7 +132,8 @@ def main():
         verbose = True,
         do_constant_folding = True,
         input_names = ['input'],
-        output_names = ['output'])
+        output_names = ['output'],
+        dynamic_axes={'input' : {0 : 'batch_size'}, 'output' : {0 : 'batch_size'}})
 
 if __name__ == '__main__':
     main()

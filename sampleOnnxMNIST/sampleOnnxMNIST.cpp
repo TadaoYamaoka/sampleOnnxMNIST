@@ -134,6 +134,16 @@ bool SampleOnnxMNIST::build()
         return false;
     }
 
+    builder->setMaxBatchSize(1);
+
+    // Optimization Profiles
+    auto profile = builder->createOptimizationProfile();
+    const auto dims = network->getInput(0)->getDimensions().d;
+    profile->setDimensions(mParams.inputTensorNames[0].c_str(), OptProfileSelector::kMIN, Dims4(1, dims[1], dims[2], dims[3]));
+    profile->setDimensions(mParams.inputTensorNames[0].c_str(), OptProfileSelector::kOPT, Dims4(1, dims[1], dims[2], dims[3]));
+    profile->setDimensions(mParams.inputTensorNames[0].c_str(), OptProfileSelector::kMAX, Dims4(1, dims[1], dims[2], dims[3]));
+    config->addOptimizationProfile(profile);
+
     mEngine = std::shared_ptr<nvinfer1::ICudaEngine>(
         builder->buildEngineWithConfig(*network, *config), samplesCommon::InferDeleter());
     if (!mEngine)
@@ -207,6 +217,16 @@ bool SampleOnnxMNIST::infer()
         return false;
     }
 
+    // Set the input size for the preprocessor
+    auto dims = mInputDims;
+    dims.d[0] = mParams.batchSize;
+    context->setBindingDimensions(0, dims);
+    // We can only run inference once all dynamic input shapes have been specified.
+    if (!context->allInputDimensionsSpecified())
+    {
+        return false;
+    }
+
     // Read the input data into the managed buffers
     assert(mParams.inputTensorNames.size() == 1);
     if (!processInput(buffers))
@@ -217,7 +237,8 @@ bool SampleOnnxMNIST::infer()
     // Memcpy from host input buffers to device input buffers
     buffers.copyInputToDevice();
 
-    bool status = context->execute(mParams.batchSize, buffers.getDeviceBindings().data());
+    //bool status = context->execute(mParams.batchSize, buffers.getDeviceBindings().data());
+    bool status = context->executeV2(buffers.getDeviceBindings().data());
     if (!status)
     {
         return false;
@@ -272,7 +293,7 @@ bool SampleOnnxMNIST::processInput(const samplesCommon::BufferManager& buffers)
 //!
 bool SampleOnnxMNIST::verifyOutput(const samplesCommon::BufferManager& buffers)
 {
-    const int outputSize = mOutputDims.d[1];
+    const int outputSize = 10;
     float* output = static_cast<float*>(buffers.getHostBuffer(mParams.outputTensorNames[0]));
     float val{0.0f};
     int idx{0};
