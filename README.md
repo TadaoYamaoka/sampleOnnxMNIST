@@ -1,6 +1,6 @@
 # WindowsでのTensorRT MNISTサンプルプログラム
 
-公式のサンプルプログラム[“Hello World” For TensorRT From ONNX](https://github.com/NVIDIA/TensorRT/tree/release/6.0/samples/opensource/sampleOnnxMNIST)を元にしたWindows上でTensorRTを動かすサンプルプログラムです。
+公式のサンプルプログラム[“Hello World” For TensorRT From ONNX](https://github.com/NVIDIA/TensorRT/tree/master/samples/opensource/sampleOnnxMNIST)を元にしたWindows上でTensorRTを動かすサンプルプログラムです。
 
 モデルの訓練はPytorchで行い、ONNXでモデルを出力して、C++でモデルを読み込みTensorRTで推論を行います。
 
